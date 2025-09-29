@@ -1,5 +1,5 @@
 ---
-name: Test
+name: Lint
 
 on:
   pull_request:
@@ -9,18 +9,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  unit:
+  pre-commit:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
 
     steps:
       - uses: actions/checkout@v5
 
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@v5
         with:
           go-version: "1.25"
 
-      - name: Run unit tests
-        run: go test ./...
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: --all-files
