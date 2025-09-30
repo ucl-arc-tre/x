@@ -41,7 +41,7 @@ func TestServeLogStream(t *testing.T) {
 	for _, expectedLine := range expectedLines {
 		assert.Contains(t, logStream, expectedLine)
 	}
-	assert.Regexp(t, regexp.MustCompile(`Started.*\n.*Recieved termination signal`), logStream)
+	assert.Regexp(t, regexp.MustCompile(`Started.*\n.*Received termination signal`), logStream)
 }
 
 func must[T any](obj T, err error) T {
