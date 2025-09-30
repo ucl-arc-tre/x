@@ -20,7 +20,7 @@ func Serve(server *http.Server, shutdownDuration time.Duration) {
 	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM)
 	<-signalChan
-	log.Info().Msg("Recieved termination signal")
+	log.Info().Msg("Received termination signal")
 
 	ctx, cancel := context.WithTimeout(context.Background(), shutdownDuration)
 	defer cancel()

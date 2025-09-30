@@ -34,7 +34,7 @@ func TestServeLogStream(t *testing.T) {
 	logStream := string(must(io.ReadAll(logBuffer)))
 	expectedLines := []string{
 		"Started HTTP server",
-		"Recieved termination signal",
+		"Received termination signal",
 		"Closing server",
 		"Server exited",
 	}
