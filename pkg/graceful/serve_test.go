@@ -19,7 +19,11 @@ func TestServeLogStream(t *testing.T) {
 	logBuffer := &bytes.Buffer{}
 	log.Logger = zerolog.New(logBuffer)
 
-	go Serve(&http.Server{Handler: http.NewServeMux()}, 10*time.Millisecond)
+	server := http.Server{
+		Handler: http.NewServeMux(),
+		Addr:    "127.0.0.1:8000",
+	}
+	go Serve(&server, 10*time.Millisecond)
 	time.Sleep(100 * time.Millisecond) // some startup time
 
 	process := must(os.FindProcess(os.Getpid()))
