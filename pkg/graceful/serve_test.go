@@ -25,6 +25,8 @@ import (
 
 func TestServeLogStream(t *testing.T) {
 	logBuffer := &bytes.Buffer{}
+	original := log.Logger
+	t.Cleanup(func() { log.Logger = original })
 	log.Logger = zerolog.New(logBuffer)
 
 	server := http.Server{
@@ -54,6 +56,8 @@ func TestServeLogStream(t *testing.T) {
 
 func TestServeTLSLogStream(t *testing.T) {
 	logBuffer := &bytes.Buffer{}
+	original := log.Logger
+	t.Cleanup(func() { log.Logger = original })
 	log.Logger = zerolog.New(logBuffer)
 
 	key := must(ecdsa.GenerateKey(elliptic.P256(), rand.Reader))
