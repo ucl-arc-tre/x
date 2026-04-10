@@ -43,6 +43,7 @@ func listenAndServeTLS(server *http.Server) {
 func serveGracefully(server *http.Server, shutdownDuration time.Duration) {
 	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM)
+	defer signal.Stop(signalChan)
 	<-signalChan
 	log.Info().Msg("Received termination signal")
 
