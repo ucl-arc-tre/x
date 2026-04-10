@@ -94,6 +94,14 @@ func TestServeTLSLogStream(t *testing.T) {
 	assert.Regexp(t, regexp.MustCompile(`Started.*\n.*Received termination signal`), logStream)
 }
 
+func TestServeTLSPanicsWithoutTLSConfig(t *testing.T) {
+	server := http.Server{
+		Handler: http.NewServeMux(),
+		Addr:    "127.0.0.1:8443",
+	}
+	assert.Panics(t, func() { ServeTLS(&server, 10*time.Millisecond) })
+}
+
 func must[T any](obj T, err error) T {
 	if err != nil {
 		panic(err)

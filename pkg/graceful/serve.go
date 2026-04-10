@@ -26,8 +26,12 @@ func listenAndServe(server *http.Server) {
 }
 
 // ServeTLS serves an HTTPS handler with graceful shutdown of connections on
-// SIGINT and SIGTERM.
+// SIGINT and SIGTERM. The server's TLSConfig must have at least one certificate
+// configured.
 func ServeTLS(server *http.Server, shutdownDuration time.Duration) {
+	if server.TLSConfig == nil || len(server.TLSConfig.Certificates) == 0 {
+		panic("ServeTLS requires TLSConfig with at least one certificate")
+	}
 	go listenAndServeTLS(server)
 	log.Info().Msg("Started HTTPS server")
 	serveGracefully(server, shutdownDuration)
