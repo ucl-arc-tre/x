@@ -25,7 +25,7 @@ func listenAndServe(server *http.Server) {
 	}
 }
 
-// ServeTLS serves a https handler with graceful shutdown of connections on
+// ServeTLS serves an HTTPS handler with graceful shutdown of connections on
 // SIGINT and SIGTERM.
 func ServeTLS(server *http.Server, shutdownDuration time.Duration) {
 	go listenAndServeTLS(server)
