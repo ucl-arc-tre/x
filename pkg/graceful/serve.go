@@ -16,7 +16,31 @@ import (
 func Serve(server *http.Server, shutdownDuration time.Duration) {
 	go listenAndServe(server)
 	log.Info().Msg("Started HTTP server")
+	serveGracefully(server, shutdownDuration)
+}
 
+func listenAndServe(server *http.Server) {
+	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		log.Err(err).Msg("Failed to serve")
+	}
+}
+
+// ServeTLS serves a https handler with graceful shutdown of connections on
+// SIGINT and SIGTERM.
+func ServeTLS(server *http.Server, shutdownDuration time.Duration) {
+	go listenAndServeTLS(server)
+	log.Info().Msg("Started HTTPS server")
+	serveGracefully(server, shutdownDuration)
+}
+
+func listenAndServeTLS(server *http.Server) {
+	// cert/key are in server.TLSConfig, so pass empty strings
+	if err := server.ListenAndServeTLS("", ""); err != nil && err != http.ErrServerClosed {
+		log.Err(err).Msg("Failed to serve")
+	}
+}
+
+func serveGracefully(server *http.Server, shutdownDuration time.Duration) {
 	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM)
 	<-signalChan
@@ -29,10 +53,4 @@ func Serve(server *http.Server, shutdownDuration time.Duration) {
 		log.Err(err).Msg("Server failed to shutdown")
 	}
 	log.Info().Msg("Server exited")
-}
-
-func listenAndServe(server *http.Server) {
-	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		log.Err(err).Msg("Failed to serve")
-	}
 }
