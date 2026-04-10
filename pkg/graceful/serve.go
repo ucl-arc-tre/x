@@ -40,7 +40,7 @@ func ServeTLS(server *http.Server, shutdownDuration time.Duration) {
 func listenAndServeTLS(server *http.Server) {
 	// cert/key are in server.TLSConfig, so pass empty strings
 	if err := server.ListenAndServeTLS("", ""); err != nil && err != http.ErrServerClosed {
-		log.Err(err).Msg("Failed to serve")
+		log.Err(err).Msg("Failed to serve TLS")
 	}
 }
 
